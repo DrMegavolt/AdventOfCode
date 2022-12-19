@@ -1,0 +1,177 @@
+Statistical profiling result from ./isolate-0x7499850-831247-v8.log, (4472 ticks, 0 unaccounted, 0 excluded).
+
+ [Shared libraries]:
+   ticks  total  nonlib   name
+    380    8.5%          /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      3    0.1%          /usr/lib/x86_64-linux-gnu/libc.so.6
+
+ [JavaScript]:
+   ticks  total  nonlib   name
+   4059   90.8%   99.3%  JS: *work file:///home/drmegavolt/santa/day17/task17.js:44:14
+      4    0.1%    0.1%  JS: *checkNextStepValid file:///home/drmegavolt/santa/day17/task17.js:91:28
+      1    0.0%    0.0%  JS: ^checkNextStepValid file:///home/drmegavolt/santa/day17/task17.js:91:28
+
+ [C++]:
+   ticks  total  nonlib   name
+     10    0.2%    0.2%  fwrite@@GLIBC_2.2.5
+      6    0.1%    0.1%  __write@@GLIBC_2.2.5
+      2    0.0%    0.0%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+      2    0.0%    0.0%  _IO_file_xsputn@@GLIBC_2.2.5
+      1    0.0%    0.0%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+      1    0.0%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
+      1    0.0%    0.0%  sigaddset@@GLIBC_2.2.5
+      1    0.0%    0.0%  fputc@@GLIBC_2.2.5
+      1    0.0%    0.0%  __libc_malloc@@GLIBC_2.2.5
+
+ [Summary]:
+   ticks  total  nonlib   name
+   4064   90.9%   99.4%  JavaScript
+     25    0.6%    0.6%  C++
+      1    0.0%    0.0%  GC
+    383    8.6%          Shared libraries
+
+ [C++ entry points]:
+   ticks    cpp   total   name
+      9   56.3%    0.2%  fwrite@@GLIBC_2.2.5
+      2   12.5%    0.0%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+      2   12.5%    0.0%  __write@@GLIBC_2.2.5
+      1    6.3%    0.0%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+      1    6.3%    0.0%  __libc_malloc@@GLIBC_2.2.5
+      1    6.3%    0.0%  _IO_file_xsputn@@GLIBC_2.2.5
+
+ [Bottom up (heavy) profile]:
+  Note: percentage shows a share of a particular caller in the total
+  amount of its parent calls.
+  Callers occupying less than 1.0% are not shown.
+
+   ticks parent  name
+   4059   90.8%  JS: *work file:///home/drmegavolt/santa/day17/task17.js:44:14
+   4059  100.0%    Script: ~<anonymous> file:///home/drmegavolt/santa/day17/task17.js:1:1
+   4059  100.0%      /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+   4059  100.0%        /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+   4059  100.0%          JS: ~run node:internal/modules/esm/module_job:189:12
+   4059  100.0%            /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+
+    380    8.5%  /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+    332   87.4%    Script: ~<anonymous> file:///home/drmegavolt/santa/day17/task17.js:1:1
+    332  100.0%      /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+    332  100.0%        /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+    332  100.0%          JS: ~run node:internal/modules/esm/module_job:189:12
+    332  100.0%            /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+     40   10.5%    /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      7   17.5%      JS: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      7  100.0%        JS: ^nativeModuleRequire node:internal/bootstrap/loaders:356:29
+      1   14.3%          JS: ~lazyLoadStreams node:fs:2903:25
+      1  100.0%            JS: ~get ReadStream node:fs:3046:17
+      1   14.3%          JS: ~<anonymous> node:internal/readline/interface:1:1
+      1  100.0%            JS: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      1   14.3%          JS: ~<anonymous> node:internal/modules/esm/translators:1:1
+      1  100.0%            JS: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      1   14.3%          JS: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1  100.0%            JS: ~<anonymous> node:internal/process/esm_loader:1:1
+      1   14.3%          JS: ~<anonymous> node:internal/modules/esm/load:1:1
+      1  100.0%            JS: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      1   14.3%          JS: ~<anonymous> node:internal/fs/promises:1:1
+      1  100.0%            JS: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      1   14.3%          JS: ~<anonymous> node:internal/blocklist:1:1
+      1  100.0%            JS: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      2    5.0%      JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      2  100.0%        JS: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      2  100.0%          JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      2    5.0%      JS: ~onParseError node:internal/url:564:22
+      2  100.0%        /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      2  100.0%          JS: ^URL node:internal/url:637:14
+      2  100.0%            JS: ~defaultResolve node:internal/modules/esm/resolve:997:30
+      2    5.0%      JS: ~initializeSourceMapsHandlers node:internal/process/pre_execution:602:38
+      2  100.0%        JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      2  100.0%          JS: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      2  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      2    5.0%      JS: ~initializeCJSLoader node:internal/process/pre_execution:563:29
+      2  100.0%        JS: ~setupUserModules node:internal/process/pre_execution:121:26
+      2  100.0%          JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      2  100.0%            JS: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      2    5.0%      JS: ~<anonymous> node:internal/modules/esm/fetch_module:1:1
+      2  100.0%        JS: ~<anonymous> node:internal/modules/esm/get_format:1:1
+      2  100.0%          JS: ~<anonymous> node:internal/modules/esm/resolve:1:1
+      2  100.0%            JS: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1    2.5%      JS: ~tryStatSync node:internal/modules/esm/resolve:172:3
+      1  100.0%        JS: ~finalizeResolution node:internal/modules/esm/resolve:242:28
+      1  100.0%          JS: ~moduleResolve node:internal/modules/esm/resolve:857:23
+      1  100.0%            JS: ~defaultResolve node:internal/modules/esm/resolve:997:30
+      1    2.5%      JS: ~setupWebCrypto node:internal/process/pre_execution:270:24
+      1  100.0%        JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%          JS: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    2.5%      JS: ~setupDebugEnv node:internal/process/pre_execution:352:23
+      1  100.0%        JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%          JS: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    2.5%      JS: ~readFileHandle node:internal/fs/promises:431:30
+      1  100.0%        JS: ~readFile node:internal/fs/promises:909:24
+      1  100.0%          /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      1    2.5%      JS: ~open node:internal/fs/promises:541:20
+      1  100.0%        JS: ~readFile node:internal/fs/promises:909:24
+      1  100.0%          JS: ~getSource node:internal/modules/esm/load:32:25
+      1  100.0%            JS: ~defaultLoad node:internal/modules/esm/load:72:27
+      1    2.5%      JS: ~moduleStrategy node:internal/modules/esm/translators:114:56
+      1  100.0%        JS: ~moduleProvider node:internal/modules/esm/loader:441:28
+      1  100.0%          /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      1    2.5%      JS: ~initializeGlobalConsole node:internal/console/constructor:688:33
+      1  100.0%        JS: ~patchProcessObject node:internal/process/pre_execution:135:28
+      1  100.0%          JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%            JS: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1    2.5%      JS: ~getStdout node:internal/bootstrap/switches/is_main_thread:146:19
+      1  100.0%        JS: ~get node:internal/console/constructor:209:14
+      1  100.0%          JS: ~value node:internal/console/constructor:337:20
+      1  100.0%            JS: ~log node:internal/console/constructor:376:6
+      1    2.5%      JS: ~getCLIOptionsFromBinding node:internal/options:18:34
+      1  100.0%        JS: ~getOptionValue node:internal/options:44:24
+      1  100.0%          JS: ~patchProcessObject node:internal/process/pre_execution:135:28
+      1  100.0%            JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      1    2.5%      JS: ~get href node:internal/url:754:11
+      1  100.0%        JS: ~<anonymous> node:internal/modules/run_main:56:29
+      1  100.0%          JS: ~loadESM node:internal/process/esm_loader:99:41
+      1  100.0%            /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      1    2.5%      JS: ~executeUserEntryPoint node:internal/modules/run_main:75:31
+      1  100.0%        JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    2.5%      JS: ~createWritableStdioStream node:internal/bootstrap/switches/is_main_thread:45:35
+      1  100.0%        JS: ~getStdout node:internal/bootstrap/switches/is_main_thread:146:19
+      1  100.0%          JS: ~get node:internal/console/constructor:209:14
+      1  100.0%            JS: ~value node:internal/console/constructor:337:20
+      1    2.5%      JS: ~ObjectDefineProperty.__proto__ node:internal/modules/esm/loader:146:5
+      1  100.0%        /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      1    2.5%      JS: ~Duplex node:internal/streams/duplex:54:16
+      1  100.0%        JS: ~Socket node:net:314:16
+      1  100.0%          JS: ~WriteStream node:tty:84:21
+      1  100.0%            JS: ~createWritableStdioStream node:internal/bootstrap/switches/is_main_thread:45:35
+      1    2.5%      JS: ~<anonymous> node:net:1:1
+      1  100.0%        JS: ~<anonymous> node:internal/modules/esm/fetch_module:1:1
+      1  100.0%          JS: ~<anonymous> node:internal/modules/esm/get_format:1:1
+      1  100.0%            JS: ~<anonymous> node:internal/modules/esm/resolve:1:1
+      1    2.5%      JS: ~<anonymous> node:internal/process/esm_loader:1:1
+      1  100.0%        JS: ~<anonymous> node:internal/modules/cjs/loader:1:1
+      1  100.0%          JS: ~initializeCJSLoader node:internal/process/pre_execution:563:29
+      1  100.0%            JS: ~setupUserModules node:internal/process/pre_execution:121:26
+      1    2.5%      JS: ~<anonymous> node:internal/per_context/primordials:503:53
+      1    2.5%      JS: ~<anonymous> node:internal/modules/esm/resolve:1:1
+      1  100.0%        JS: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1  100.0%          JS: ~<anonymous> node:internal/process/esm_loader:1:1
+      1  100.0%            JS: ~<anonymous> node:internal/modules/cjs/loader:1:1
+      1    2.5%      JS: ~<anonymous> node:internal/modules/esm/module_map:1:1
+      1  100.0%        JS: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1  100.0%          JS: ~<anonymous> node:internal/process/esm_loader:1:1
+      1  100.0%            JS: ~<anonymous> node:internal/modules/cjs/loader:1:1
+      1    2.5%      JS: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1  100.0%        JS: ~<anonymous> node:internal/process/esm_loader:1:1
+      1  100.0%          JS: ~<anonymous> node:internal/modules/cjs/loader:1:1
+      1  100.0%            JS: ~initializeCJSLoader node:internal/process/pre_execution:563:29
+      1    2.5%      JS: ~<anonymous> node:internal/modules/cjs/loader:1:1
+      1  100.0%        JS: ~initializeCJSLoader node:internal/process/pre_execution:563:29
+      1  100.0%          JS: ~setupUserModules node:internal/process/pre_execution:121:26
+      1  100.0%            JS: ~prepareExecution node:internal/process/pre_execution:52:26
+      1    2.5%      JS: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    2.5%      /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+      1  100.0%        JS: ~primordials.SafePromiseAllReturnVoid node:internal/per_context/primordials:518:40
+      1  100.0%          JS: ~link node:internal/modules/esm/module_job:67:18
+      1  100.0%            /home/drmegavolt/.nvm/versions/node/v19.2.0/bin/node
+
