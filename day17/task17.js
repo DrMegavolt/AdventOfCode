@@ -31,8 +31,8 @@ let superCave = new Array(7).fill();
 let rockCounter = 1;
 let yOffset = 3;
 
-// let maxRocks = 2022;
-let maxRocks = 1000000000000;
+let maxRocks = 2022;
+// let maxRocks = 1000000000000;
 // let maxRocks = 10000000;
 work();
 
@@ -40,27 +40,10 @@ work();
 let cols = superCave.map((col) => col);
 console.log("PART 1", Math.max(...cols) - 1);
 console.log("PART 1", yOffset - 1);
-var startTime, endTime;
 
-function start() {
-  startTime = new Date();
-}
-
-function end() {
-  endTime = new Date();
-  var timeDiff = endTime - startTime; //in ms
-  // strip the ms
-
-  // get seconds
-  var seconds = Math.round(timeDiff);
-  console.log(seconds + " seconds");
-}
-start();
 function work() {
   while (rockCounter <= maxRocks + 1) {
     if (rockCounter % 100000000 === 1) {
-      end();
-      start();
       console.log(
         "ROCK",
         rockCounter,
@@ -68,9 +51,9 @@ function work() {
         "%"
       );
     }
-    // let rock = generateRock(rockCounter);
-    // dropRock(rock);
-    rockCounter += 1;
+    let rock = generateRock(rockCounter);
+    dropRock(rock);
+    // rockCounter += 1;
   }
 }
 
@@ -107,7 +90,6 @@ function dropRock(rock) {
       break;
     }
   }
-  return { xOffset };
 }
 
 function checkNextStepValid(rock, xOffset, yOffset, move) {
@@ -142,8 +124,6 @@ function draw(rock, xOffset, yOffset, move, symbol) {
   for (let x = 0; x < rock.length; x++) {
     for (let y = 0; y < rock[0].length; y++) {
       if (rock[x][y] === true) {
-        // console.log("DRAW", x + xOffset, y + yOffset - move);
-
         superCave[x + xOffset] = y + yOffset - move;
       }
     }

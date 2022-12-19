@@ -3,7 +3,6 @@ import { readDataLines } from "../common/index.js";
 const lines = readDataLines("day18/input_test3_3494_2062.txt");
 
 let data = [];
-
 let maxX = 0;
 let maxY = 0;
 let maxZ = 0;
@@ -25,6 +24,8 @@ maxZ += 1;
 function makeKey(x, y, z) {
   return x + "," + y + "," + z;
 }
+
+// fast, but very deep DFS recursion, added --stack-size=65500 to add more call stack size
 function calculate3dSurface(map, x, y, z) {
   if (x < 0 || y < 0 || z < 0) {
     return 0;
@@ -104,17 +105,6 @@ function exploreCavity() {
     for (let y = 0; y <= maxY; y++) {
       for (let z = 0; z <= maxZ; z++) {
         let key = makeKey(x, y, z);
-
-        // if (z === 11) {
-        //   console.log(
-        //     "checking ",
-        //     x,
-        //     y,
-        //     "result:",
-        //     map.get(key),
-        //     visited.get(key)
-        //   );
-        // }
         if (!map.get(key) && !visited.get(key)) {
           //   console.log("CAVITY FOUND", x, y, z);
           return calculate3dSurface(map, x, y, z);
