@@ -4,7 +4,8 @@ export function testBlueprint(bp, time) {
   console.log("TESTING", bp.id, time);
   console.log(bp.robotSpecs);
   let maxtime = time;
-  let cache = new BigMap();
+  let hits = 0;
+  let cache = new Map();
   let maxProductionRequired = {
     ore: Math.max(...bp.robotSpecs.map((x) => x.ore)),
     clay: Math.max(...bp.robotSpecs.map((x) => x.clay)),
@@ -16,7 +17,27 @@ export function testBlueprint(bp, time) {
     if (time < 0) {
       return resources.geode;
     }
-    // console.log(maxtime - time, "---", robots);
+
+    if (robots.clay >= maxProductionRequired.clay) {
+      // we will produce new obsidian or geode robot for each next turn
+      // priority to geode
+
+      let obsidianCostPerRobot = bp.robotSpecs.find(
+        (x) => x.production === "geode"
+      ).obsidian;
+
+      for (let t = 1; t < time; t++) {
+        if (resources.obsidian >= obsidianCostPerRobot) {
+          resources.obsidian -= obsidianCostPerRobot;
+          robots.geode++;
+        } else {
+          robots.obsidian++; // we have unlimited clay, we can make a new obsidian robot
+        }
+        resources.geode += robots.geode;
+        resources.obsidian += robots.obsidian; // *rate = 1
+      }
+      return resources.geode;
+    }
 
     if (robots.obsidian >= maxProductionRequired.obsidian) {
       // we will produce new geode robot for each next turn
@@ -28,23 +49,20 @@ export function testBlueprint(bp, time) {
       // 5+6+7+8 = 26 (5+8)/2 *4 = 26;  5+5+5+5+0+1+2+3 = 26;
       // n*t+(t-1)*t/2 , with n=5 t=4 => 5*4+3*4/2 = 26
       // 5+6+7+8+9 = 35 (5+9)/2 *5 = 35
-      console.log("maxtime production of obsidian", robots.obsidian);
+      //   console.log("maxtime production of obsidian", robots.obsidian);
       let n = robots.geode;
       let t = time;
-      console.log(
-        "time left",
-        t,
-        "result",
-        resources.geode + n * t + ((t - 1) * t) / 2,
-        "geodes"
-      );
 
       return resources.geode + n * t + ((t - 1) * t) / 2;
     }
 
-    let key = `${time}-${resources.ore}-${resources.clay}-${resources.obsidian}-${resources.geode}-${robots.ore}-${robots.clay}-${robots.obsidian}-${robots.geode}`;
+    // we can skip geode robots in key, it will be computed later +50% speed
+    // looks like we can skip robots.obsidian too? WHY? +50% speed
+    let key = `${time}-${resources.ore}-${resources.clay}-${resources.obsidian}-${robots.ore}-${robots.clay}`;
+    // let key = `${time}-${resources.ore}-${resources.clay}-${resources.obsidian}-${robots.ore}-${robots.clay}-${robots.obsidian}`;
     // console.log(key);
     if (cache.has(key)) {
+      hits++;
       //   console.log("cache hit", cache.get(key));
       return cache.get(key);
     }
@@ -63,13 +81,10 @@ export function testBlueprint(bp, time) {
     // if enough resources build geode robots or skip
 
     let maxGeode = newResources.geode;
-    let skip = bfs(bp, time - 1, newResources, { ...robots });
-    maxGeode = Math.max(maxGeode, skip);
 
-    // or collect resources, wait 1 miute for robot to build
+    // let robotWasBuilt = false;
     for (let robot of bp.robotSpecs) {
       if (robots[robot.production] >= maxProductionRequired[robot.production]) {
-        // console.log("skip", robot.production);
         continue; // skip if max production reached
       }
       // test build vs skip
@@ -88,22 +103,38 @@ export function testBlueprint(bp, time) {
       res.clay -= robot.clay;
       res.obsidian -= robot.obsidian;
       let build = bfs(bp, time - 1, res, newRobots);
+      //   robotWasBuilt = true;
       maxGeode = Math.max(maxGeode, build);
     }
+    // if (!robotWasBuilt) {
+    let skip = bfs(bp, time - 1, newResources, { ...robots });
+    maxGeode = Math.max(maxGeode, skip);
+    // }
+
     cache.set(key, maxGeode);
     return maxGeode;
   };
-  let resources = {
-    ore: 0,
-    clay: 0,
-    obsidian: 0,
-    geode: 0,
-  };
+
   let robots = {
     ore: 1,
     clay: 0,
     obsidian: 0,
     geode: 0,
   };
-  return bfs(bp, time - 1, resources, robots);
+
+  let startingOreRequired = Math.min(
+    ...bp.robotSpecs
+      .filter((x) => x.production === "ore" || x.production === "clay")
+      .map((x) => x.ore)
+  );
+  let resources = {
+    ore: startingOreRequired,
+    clay: 0,
+    obsidian: 0,
+    geode: 0,
+  };
+
+  let out = bfs(bp, time - 1 - startingOreRequired, resources, robots);
+  console.log("cache hits", hits, cache.size, hits / cache.size);
+  return out;
 }

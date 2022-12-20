@@ -2,8 +2,8 @@
 // sudo sysctl -w vm.max_map_count=655300
 //
 
-// expect RAM usage ~40GB at peak and runtime ~1h
-// TODO rewrite with BFS
+// expect RAM usage <2GB at peak and runtime <10 sec for part 1 (24 iterations)
+// expect RAM usage ~5GB at peak and runtime <1min for part 2 (32 iterations)
 import { readDataLines, BigMap } from "../common/index.js";
 import { Worker } from "worker_threads";
 // parse input
@@ -55,12 +55,12 @@ await Promise.all(processes).then((results) => {
   }
 });
 
-// RESULTS  for 24 runs
+// RESULTS for 24 runs
 // { id: 1, geodes: 0 }
 // { id: 2, geodes: 3 }
 // { id: 3, geodes: 4 }
 
-console.log("PART 1", part2); // 1413 for input
+console.log("PART 2", part2); // 21080 correct answer
 function doTestBlueprint(bp) {
   return new Promise((resolve, reject) => {
     const worker = new Worker("./day19/worker19.js", {
