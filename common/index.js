@@ -1,4 +1,6 @@
 import { readFileSync } from "fs";
+export { BigMap } from "./BigMap.js";
+export { BigSet } from "./BigSet.js";
 import path from "path";
 
 export function readData(folders) {
