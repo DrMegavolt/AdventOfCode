@@ -4,7 +4,7 @@
 
 // expect RAM usage <2GB at peak and runtime <10 sec for part 1 (24 iterations)
 // expect RAM usage ~5GB at peak and runtime <1min for part 2 (32 iterations)
-import { readDataLines, BigMap } from "../common/index.js";
+import { readDataLines } from "../common/index.js";
 import { Worker } from "worker_threads";
 // parse input
 const lines = readDataLines("day19/input.txt");

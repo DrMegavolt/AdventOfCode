@@ -1,9 +1,6 @@
-import { BigMap } from "../common/index.js";
-
 export function testBlueprint(bp, time) {
   console.log("TESTING", bp.id, time);
   console.log(bp.robotSpecs);
-  let maxtime = time;
   let hits = 0;
   let cache = new Map();
   let maxProductionRequired = {
@@ -18,7 +15,11 @@ export function testBlueprint(bp, time) {
       return resources.geode;
     }
 
+    // likely the entire bfs can be replaced with the strategy to build the most expensive robot first
+    // so far working with geode/obsidian robots
     if (robots.clay >= maxProductionRequired.clay) {
+      // this is the key to make it fast
+      // after we max out clay production, we can skip all clay robots and ore robots
       // we will produce new obsidian or geode robot for each next turn
       // priority to geode
 
@@ -37,23 +38,6 @@ export function testBlueprint(bp, time) {
         resources.obsidian += robots.obsidian; // *rate = 1
       }
       return resources.geode;
-    }
-
-    if (robots.obsidian >= maxProductionRequired.obsidian) {
-      // we will produce new geode robot for each next turn
-      ///
-      // current geode robots 5
-      // next robots: 6 production 5
-      // next robots: 7 production 6
-      // next robots: 8 production 7
-      // 5+6+7+8 = 26 (5+8)/2 *4 = 26;  5+5+5+5+0+1+2+3 = 26;
-      // n*t+(t-1)*t/2 , with n=5 t=4 => 5*4+3*4/2 = 26
-      // 5+6+7+8+9 = 35 (5+9)/2 *5 = 35
-      //   console.log("maxtime production of obsidian", robots.obsidian);
-      let n = robots.geode;
-      let t = time;
-
-      return resources.geode + n * t + ((t - 1) * t) / 2;
     }
 
     // we can skip geode robots in key, it will be computed later +50% speed
