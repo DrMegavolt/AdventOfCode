@@ -35,12 +35,12 @@ class Blueprint {
 }
 
 let blueprints = new Map();
-for (let line of lines) {
+for (let line of lines.slice(0, 3)) {
   let bp = new Blueprint(line);
   blueprints.set(bp.id, bp);
 }
 
-let part1 = 0;
+let part2 = 1;
 
 let processes = [];
 for (let bp of blueprints.values()) {
@@ -51,15 +51,20 @@ for (let bp of blueprints.values()) {
 await Promise.all(processes).then((results) => {
   console.log("RESULTS", results);
   for (let r of results) {
-    part1 += r.geodes * r.id;
+    part2 *= r.geodes;
   }
 });
 
-console.log("PART 1", part1); // 1413 for input
+// RESULTS  for 24 runs
+// { id: 1, geodes: 0 }
+// { id: 2, geodes: 3 }
+// { id: 3, geodes: 4 }
+
+console.log("PART 1", part2); // 1413 for input
 function doTestBlueprint(bp) {
   return new Promise((resolve, reject) => {
     const worker = new Worker("./day19/worker19.js", {
-      workerData: { blueprint: bp, time: 24 },
+      workerData: { blueprint: bp, time: 32 },
     });
 
     worker.on("message", (data) => {

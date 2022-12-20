@@ -29,6 +29,8 @@
     "day17p": "NODE_ENV=production node  --prof day17/task17.js",
     "day18": "node --stack-size=65500  day18/task18.js",
     "day19": "node --stack-size=65500 --max-old-space-size=50000 day19/task19.js",
+    "day19_2": "node --stack-size=65500 --max-old-space-size=50000 day19/task19_part2.js",
+    "day19_s": "node --stack-size=65500 --max-old-space-size=50000 day19/task19_single_thread.js",
     "day20": "node day20/task20.js",
     "day21": "node day21/task21.js",
     "day22": "node day22/task22.js",

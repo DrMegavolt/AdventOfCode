@@ -6,7 +6,7 @@ export class BigMap {
     public api, compatible with "Map"
   */
   constructor(...parameters) {
-    this.maxSize = parameters.maxSize || Math.pow(2, 20); // 24
+    this.maxSize = parameters.maxSize || Math.pow(2, 22); // 24
     this.maps = [new Map(...parameters)];
   }
 
