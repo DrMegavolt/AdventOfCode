@@ -33,6 +33,7 @@
     "day19_s": "node --stack-size=65500 --max-old-space-size=50000 day19/task19_single_thread.js",
     "day20": "node day20/task20.js",
     "day21": "node day21/task21.js",
+    "day21_2": "node day21/task21_part2.js",
     "day22": "node day22/task22.js",
     "day23": "node day23/task23.js",
     "day24": "node day24/task24.js",
