@@ -34,7 +34,7 @@ function print(sequence) {
     result += numbers[index] + " ";
     arr.push(numbers[index]);
   }
-
+  //   console.log(result);
   return arr;
 }
 

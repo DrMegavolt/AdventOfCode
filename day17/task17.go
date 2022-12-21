@@ -24,7 +24,7 @@ var rockTypes = [5][][]bool{
 		{false, true, false},
 	},
 	{
-		{true, false, false}, // mirrored L, will fall ^ this way
+		{true, false, false}, // mirrored L, will fall < this way
 		{true, false, false},
 		{true, true, true},
 	},
@@ -35,7 +35,8 @@ var rockCounter = 1
 var superCave = [7]int{-1, -1, -1, -1, -1, -1, -1}
 
 func main() {
-	maxRocks := 2022
+	// maxRocks := 2022
+	maxRocks := 1000000000000
 	jetPatterns := readInput()
 
 	fmt.Println("Hello, playground", jetPatterns)
@@ -50,9 +51,18 @@ func main() {
 		}
 		rock := generateRock(rockCounter)
 		dropRock(rock, &jetPatterns)
-		rockCounter += 1
 	}
+	maxHeight := 0
+	for _, v := range superCave {
+		if v > maxHeight {
+			maxHeight = v
+		}
+	}
+
 	fmt.Println("DONE", superCave)
+	fmt.Println("DONE", maxHeight)
+	fmt.Println("DONE", maxHeight-1)
+	fmt.Println("DONE", yOffset-1)
 }
 
 func generateRock(rockCounter int) [][]bool {
@@ -66,6 +76,7 @@ func dropRock(rock [][]bool, jetPatterns *[]int) {
 	xOffset := 2 // 2 positions from the left wall
 
 	for {
+		// fmt.Println("coordinates", xOffset, yOffset-move)
 		// read jet pattern
 		j := nextJet(jetPatterns)
 		// // check of jet can push rock
@@ -109,6 +120,7 @@ func draw(rock [][]bool, xOffset int, yOffset int, move int, symbol string) {
 			}
 		}
 	}
+	// fmt.Println("superCave", superCave)
 }
 
 func checkNextStepValid(rock [][]bool, xOffset int, yOffset int, move int) bool {
@@ -127,6 +139,7 @@ func checkNextStepValid(rock [][]bool, xOffset int, yOffset int, move int) bool 
 			if rock[x][y] != true {
 				continue
 			}
+			// fmt.Println("x=", x, "y=", y)
 			newX := x + xOffset
 			newY := y + yShift
 			if superCave[newX] >= newY || // overlap
@@ -163,6 +176,10 @@ func readInput() []int {
 func nextJet(jetPatterns *[]int) int {
 	next := (*jetPatterns)[0]
 	*jetPatterns = append((*jetPatterns)[1:], next)
-
+	// direction := "left"
+	// if next == 1 {
+	// 	direction = "right"
+	// }
+	// fmt.Println("jet:", direction)
 	return next
 }

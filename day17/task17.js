@@ -31,8 +31,8 @@ let superCave = new Array(7).fill();
 let rockCounter = 1;
 let yOffset = 3;
 
-let maxRocks = 2022;
-// let maxRocks = 1000000000000;
+// let maxRocks = 2022;
+let maxRocks = 1000000000000;
 // let maxRocks = 10000000;
 work();
 
@@ -42,13 +42,16 @@ console.log("PART 1", Math.max(...cols) - 1);
 console.log("PART 1", yOffset - 1);
 
 function work() {
+  let start = Date.now();
+  console.log(start);
   while (rockCounter <= maxRocks + 1) {
     if (rockCounter % 100000000 === 1) {
       console.log(
         "ROCK",
         rockCounter,
-        ((rockCounter / maxRocks) * 100).toFixed(4),
-        "%"
+        ((rockCounter / maxRocks) * 100).toFixed(2),
+        "%",
+        Date.now() - start
       );
     }
     let rock = generateRock(rockCounter);
