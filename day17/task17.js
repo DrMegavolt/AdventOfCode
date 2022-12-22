@@ -2,6 +2,7 @@ import { readDataLines } from "../common/index.js";
 // parse input
 const lines = readDataLines("day17/input_test.txt");
 let jetPattern = lines[0].split("").map((c) => (c === "<" ? -1 : 1));
+let jetIndex = 0;
 const rockTypes = {
   0: [
     [true, true], // square
@@ -139,7 +140,8 @@ function generateRock(i) {
 }
 
 function nextJet() {
-  let next = jetPattern.shift();
-  jetPattern.push(next);
+  jetIndex = jetIndex % jetPattern.length;
+  let next = jetPattern[jetIndex];
+  jetIndex++;
   return next;
 }

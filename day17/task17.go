@@ -19,20 +19,34 @@ var rockTypes = [5][][]bool{
 		{true},
 	},
 	{
-		{false, true, false}, // plus
+		{false, true}, // plus
 		{true, true, true},
-		{false, true, false},
+		{false, true},
 	},
 	{
-		{true, false, false}, // mirrored L, will fall < this way
-		{true, false, false},
+		{true}, // J: mirrored L, will fall < this way
+		{true},
 		{true, true, true},
 	},
 	{{true, true, true, true}},
 }
 var yOffset = 3
 var rockCounter = 1
+
+// simplification that can cause bugs:
+//
+//	REAl 2d      effective representation
+//	@######      @######
+//	 @  ###      @######
+//	  @ ###      @######
+//
+// we are potentially missing scenario where rock can go under overhang
+// ideally keep track of 2d array of rock positions, but that's too much memory/performance
+// even if we constantly trim fully closed rows
 var superCave = [7]int{-1, -1, -1, -1, -1, -1, -1}
+
+var jetIndex = 0
+var tmp = 0
 
 func main() {
 	// maxRocks := 2022
@@ -49,8 +63,7 @@ func main() {
 			percentage := float64(i) / 1000000000000.0 * 100.0
 			fmt.Printf("Progress: %.2f%%\n", percentage)
 		}
-		rock := generateRock(rockCounter)
-		dropRock(rock, &jetPatterns)
+		dropRock(&rockCounter, jetPatterns)
 	}
 	maxHeight := 0
 	for _, v := range superCave {
@@ -60,23 +73,31 @@ func main() {
 	}
 
 	fmt.Println("DONE", superCave)
-	fmt.Println("DONE", maxHeight)
+	fmt.Println("DONE", maxHeight, tmp)
 	fmt.Println("DONE", maxHeight-1)
 	fmt.Println("DONE", yOffset-1)
 }
 
-func generateRock(rockCounter int) [][]bool {
-	rockType := rockTypes[rockCounter%5]
-	return rockType
+//	func generateRock(rockCounter int) [][]bool {
+//		rockType := rockTypes[rockCounter%5]
+//		return rockType
+//	}
+var rockHeights = [5]int{2, 1, 3, 3, 4}
+
+func rockHeight(rockType int) int {
+	return rockHeights[rockType]
 }
 
-func dropRock(rock [][]bool, jetPatterns *[]int) {
+func dropRock(rockCounter *int, jetPatterns []int) {
+	rockType := *rockCounter % 5
+	rock := rockTypes[rockType]
+
 	// fmt.Println("dropping rock", rock)
 	move := 0
 	xOffset := 2 // 2 positions from the left wall
 
 	for {
-		// fmt.Println("coordinates", xOffset, yOffset-move)
+
 		// read jet pattern
 		j := nextJet(jetPatterns)
 		// // check of jet can push rock
@@ -95,13 +116,10 @@ func dropRock(rock [][]bool, jetPatterns *[]int) {
 			move++
 		} else {
 			// draw rock as # and move to next rock
-			//   console.log("DONE with rock:", rockCounter);
-			rockCounter++
+			draw(rock, xOffset, yOffset-move) // freeze rock
 
-			draw(rock, xOffset, yOffset, move, "#") // freeze rock
-			yOffset = Max(yOffset, yOffset+len(rock[0])-move+3)
-
-			//   printCave();
+			yOffset = Max(yOffset, yOffset+rockHeight(rockType)-move+3)
+			*rockCounter++
 			break
 		}
 	}
@@ -112,11 +130,12 @@ func Max(x, y int) int {
 	}
 	return x
 }
-func draw(rock [][]bool, xOffset int, yOffset int, move int, symbol string) {
+func draw(rock [][]bool, xBase int, yBase int) {
 	for x := 0; x < len(rock); x++ {
-		for y := 0; y < len(rock[0]); y++ {
-			if rock[x][y] == true {
-				superCave[x+xOffset] = y + yOffset - move
+		row := rock[x]
+		for y := 0; y < len(row); y++ {
+			if row[y] {
+				superCave[x+xBase] = y + yBase
 			}
 		}
 	}
@@ -135,15 +154,15 @@ func checkNextStepValid(rock [][]bool, xOffset int, yOffset int, move int) bool 
 
 	yShift := yOffset - move
 	for x := 0; x < len(rock); x++ {
-		for y := 0; y < len(rock[0]); y++ {
-			if rock[x][y] != true {
+		row := rock[x]
+		for y := 0; y < len(row); y++ {
+			if !row[y] {
 				continue
 			}
 			// fmt.Println("x=", x, "y=", y)
 			newX := x + xOffset
 			newY := y + yShift
-			if superCave[newX] >= newY || // overlap
-				newY < 0 {
+			if superCave[newX] >= newY { // overlap
 				return false
 			}
 		}
@@ -173,13 +192,9 @@ func readInput() []int {
 	return result
 }
 
-func nextJet(jetPatterns *[]int) int {
-	next := (*jetPatterns)[0]
-	*jetPatterns = append((*jetPatterns)[1:], next)
-	// direction := "left"
-	// if next == 1 {
-	// 	direction = "right"
-	// }
-	// fmt.Println("jet:", direction)
+func nextJet(jetPatterns []int) int {
+	jetIndex = (jetIndex) % len(jetPatterns)
+	next := (jetPatterns)[jetIndex]
+	jetIndex++
 	return next
 }
