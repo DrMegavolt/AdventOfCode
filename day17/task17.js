@@ -3,6 +3,7 @@ import { readDataLines } from "../common/index.js";
 const lines = readDataLines("day17/input_test.txt");
 let jetPattern = lines[0].split("").map((c) => (c === "<" ? -1 : 1));
 let jetIndex = 0;
+let rockHeights = [2, 1, 3, 3, 4];
 const rockTypes = {
   0: [
     [true, true], // square
@@ -15,13 +16,13 @@ const rockTypes = {
     [true],
   ],
   2: [
-    [false, true, false], // plus
+    [false, true], // plus
     [true, true, true],
-    [false, true, false],
+    [false, true],
   ],
   3: [
-    [true, false, false], // mirrored L, will fall ^ this way
-    [true, false, false],
+    [true], // mirrored L, will fall ^ this way
+    [true],
     [true, true, true],
   ],
   4: [[true, true, true, true]],
@@ -55,16 +56,20 @@ function work() {
         Date.now() - start
       );
     }
-    let rock = generateRock(rockCounter);
-    dropRock(rock);
+
+    dropRock();
     // rockCounter += 1;
   }
 }
 
-function dropRock(rock) {
+function rockHeight(rockType) {
+  return rockHeights[rockType];
+}
+function dropRock() {
   let move = 0;
   let xOffset = 2; // 2 positions from the left wall
-
+  let rockType = rockCounter % 5;
+  let rock = rockTypes[rockType];
   while (true) {
     // read jet pattern
     let j = nextJet();
@@ -88,7 +93,7 @@ function dropRock(rock) {
       rockCounter++;
 
       draw(rock, xOffset, yOffset, move, "#"); // freeze rock
-      yOffset = Math.max(yOffset, yOffset + rock[0].length - move + 3);
+      yOffset = Math.max(yOffset, yOffset + rockHeight(rockType) - move + 3);
 
       //   printCave();
       break;
@@ -107,8 +112,9 @@ function checkNextStepValid(rock, xOffset, yOffset, move) {
 
   let yShift = yOffset - move;
   for (let x = 0; x < rock.length; x++) {
-    for (let y = 0; y < rock[0].length; y++) {
-      if (rock[x][y] !== true) {
+    let row = rock[x];
+    for (let y = 0; y < row.length; y++) {
+      if (!row[y]) {
         continue;
       }
       let newX = x + xOffset;
@@ -126,17 +132,13 @@ function checkNextStepValid(rock, xOffset, yOffset, move) {
 
 function draw(rock, xOffset, yOffset, move, symbol) {
   for (let x = 0; x < rock.length; x++) {
-    for (let y = 0; y < rock[0].length; y++) {
-      if (rock[x][y] === true) {
+    let row = rock[x];
+    for (let y = 0; y < row.length; y++) {
+      if (row[y] === true) {
         superCave[x + xOffset] = y + yOffset - move;
       }
     }
   }
-}
-
-function generateRock(i) {
-  let type = i % 5;
-  return rockTypes[type];
 }
 
 function nextJet() {
