@@ -147,22 +147,18 @@ func checkNextStepValid(rock [][]bool, xOffset int, yOffset int, move int) bool 
 	if xOffset+len(rock) > len(superCave) || xOffset < 0 {
 		return false
 	}
-	if move < 3 {
+	if move <= 3 {
 		// no obstacles
 		return true
 	}
 
-	yShift := yOffset - move
 	for x := 0; x < len(rock); x++ {
 		row := rock[x]
 		for y := 0; y < len(row); y++ {
 			if !row[y] {
 				continue
 			}
-			// fmt.Println("x=", x, "y=", y)
-			newX := x + xOffset
-			newY := y + yShift
-			if superCave[newX] >= newY { // overlap
+			if superCave[x+xOffset] >= y+yOffset-move { // overlap
 				return false
 			}
 		}
