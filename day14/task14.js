@@ -1,6 +1,6 @@
-import { readDataAsMap, readDataLines } from "../common/index.js";
+import { readDataAs2DArray, readDataLines } from "../common/index.js";
 // parse input
-const wallScans = readDataAsMap("day14/input_test.txt", { split: " -> " });
+const wallScans = readDataAs2DArray("day14/input_test.txt", { split: " -> " });
 
 // console.log(wallScans);
 
