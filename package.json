@@ -39,9 +39,14 @@
     "day23": "node day23/task23.js",
     "day24": "node day24/task24.js",
     "day25": "node day25/task25.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test22": "NODE_OPTIONS=--experimental-vm-modules jest day22",
+    "test23": "jest day23"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^29.3.1"
+  }
 }

@@ -43,6 +43,7 @@ var rockCounter = 1
 // we are potentially missing scenario where rock can go under overhang
 // ideally keep track of 2d array of rock positions, but that's too much memory/performance
 // even if we constantly trim fully closed rows
+// after ~31h run returns 1539644970428 counted by max column height, which is too high
 var superCave = [7]int{-1, -1, -1, -1, -1, -1, -1}
 
 var jetIndex = 0
