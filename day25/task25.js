@@ -12,7 +12,7 @@ let input = [];
 for (let l of lines) {
   let n10 = SNAFUtoHUMAN(l);
 
-  console.log(l, "->", n10, "->", HUMANtoSNAFU(n10));
+  //   console.log(l, "->", n10, "->", HUMANtoSNAFU(n10));
   input.push(n10);
 }
 
@@ -22,7 +22,7 @@ let output = input.reduce((acc, n) => {
 
 // output *= 100000;
 console.log(output);
-console.log("SNAFU", HUMANtoSNAFU(output));
+console.log("PART1 SNAFU=", HUMANtoSNAFU(output));
 
 function SNAFUtoHUMAN(l) {
   let number = [...l].map((c) => snafuDigits.find((x) => x.digit === c).value);

@@ -20,18 +20,13 @@ for (let line of lines) {
   let room = extractValveInfo(line);
   map.set(room.name, room);
 }
-console.log(map);
+// console.log(map);
 
 // let time = 30; //minutes
 
 function calculateFlowRate(flowRate, time) {
   let flow = flowRate * time;
   return flow;
-}
-
-function shortestPathBetweenRooms() {
-  // find shortest path between rooms
-  //return path cost
 }
 
 function bfs(roomName1, roomName2, map) {
@@ -68,12 +63,6 @@ function bfs(roomName1, roomName2, map) {
   }
   return -1;
 }
-// console.log(
-//   bfs("AA", "BB", map),
-//   bfs("AA", "JJ", map),
-//   bfs("AA", "HH", map),
-//   bfs("AA", "GG", map)
-// );
 
 let rooms = [...map.keys()];
 let connections = new Map();
@@ -84,11 +73,7 @@ for (const room of rooms) {
     connections.get(room).set(otherRoom, p);
   }
 }
-// console.log(connections);
 let roomsWithFlow = [...map.values()].filter((x) => x.rate > 0);
-/// max next flow rate
-// t = time that will left of arrival (current_time - travel_time(get from connections map) - open_time(1min)) )
-// t* flow_rate = max_flow_rate
 
 console.log(roomsWithFlow);
 
@@ -104,14 +89,6 @@ function travel(start, time, visited) {
     if (flow <= 0) {
       continue;
     }
-    console.log(
-      flow,
-      shortestPath,
-      room.name,
-      room.rate,
-      time - shortestPath - 1
-    );
-    console.log("visited", visited, start, room.name);
     let vis = [...visited];
     vis.push(room.name);
     let next = travel(room.name, time - shortestPath - 1, vis);
@@ -125,3 +102,48 @@ function travel(start, time, visited) {
 let start = "AA";
 let res = travel(start, 30, [start]);
 console.log("PART 1: ", res);
+
+function travel2(agents, visited) {
+  let max = 0;
+  // get agent with the most time left
+  agents.sort((a, b) => b.time - a.time);
+  let agent = agents[0];
+  let agent2 = agents[1];
+  let start = agent.room;
+  for (let room of roomsWithFlow) {
+    if (visited.includes(room.name)) {
+      continue;
+    }
+    let shortestPath = connections.get(start).get(room.name);
+
+    let flow = calculateFlowRate(room.rate, agent.time - shortestPath - 1);
+    if (flow <= 0) {
+      continue;
+    }
+    let vis = [...visited];
+    vis.push(room.name);
+    let newAgents = [
+      agent2,
+      {
+        name: agent.name,
+        room: room.name,
+        time: agent.time - shortestPath - 1,
+      },
+    ];
+    let next = travel2(newAgents, vis);
+    if (flow + next > max) {
+      max = flow + next;
+    }
+  }
+  return max;
+}
+
+let part2 = travel2(
+  [
+    { name: "Human", room: "AA", time: 26 },
+    { name: "Elephant", room: "AA", time: 26 },
+  ],
+  ["AA"]
+);
+
+console.log("PART 2: ", part2);
