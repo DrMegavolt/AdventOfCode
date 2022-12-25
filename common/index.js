@@ -31,13 +31,15 @@ export function readDataAs2DArray(
   return map;
 }
 
-class FieldMap extends Map {
-  constructor() {
-    super();
-    this.minX = 0;
-    this.maxX = 0;
-    this.minY = 0;
-    this.maxY = 0;
+export class FieldMap extends Map {
+  constructor(entries) {
+    super(entries);
+    // this.minX = 0;
+    // this.maxX = 0;
+    // this.minY = 0;
+    // this.maxY = 0;
+    this.#rescanDimmentions();
+    this.unlimited = true;
   }
   #rescanDimmentions() {
     let minX = Infinity;
@@ -65,9 +67,13 @@ class FieldMap extends Map {
     this.maxY = maxY;
   }
   get(x, y) {
-    return super.get(`${x},${y}`) ?? ".";
+    let v = super.get(`${x},${y}`);
+    return this.unlimited ? v || "." : v;
   }
   set(x, y, value) {
+    if (typeof x === "string" && typeof y === "string") {
+      return super.set(x, y); // for cloning
+    }
     let v = super.set(`${x},${y}`, value);
     if (x < this.minX) {
       this.minX = x;
@@ -94,6 +100,18 @@ class FieldMap extends Map {
   }
   print(options = { lineNumbers: true }) {
     let out = "";
+    let topLineNumber = [];
+
+    if (options.lineNumbers) {
+      for (let y = this.minY; y <= this.maxY; y++) {
+        topLineNumber.push([...y.toString().padEnd(3, " ")]);
+      }
+
+      for (let t = 0; t < topLineNumber[0].length; t++) {
+        let line = "    " + topLineNumber.map((x) => x[t]).join("");
+        out += line + "\n";
+      }
+    }
     for (let x = this.minX; x <= this.maxX; x++) {
       if (options.lineNumbers) {
         out += x.toString().padEnd(4, " ");
@@ -101,7 +119,16 @@ class FieldMap extends Map {
       for (let y = this.minY; y <= this.maxY; y++) {
         out += this.get(x, y) || ".";
       }
+      if (options.lineNumbers) {
+        out += x.toString().padStart(4, " ");
+      }
       out += "\n";
+    }
+    if (options.lineNumbers) {
+      for (let t = 0; t < topLineNumber[0].length; t++) {
+        let line = "    " + topLineNumber.map((x) => x[t]).join("");
+        out += line + "\n";
+      }
     }
     console.log(out);
   }
