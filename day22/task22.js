@@ -75,6 +75,7 @@ for (let instr of instructions) {
   }
 }
 // 143034 is too low
+// 158109 is too high
 console.log(
   "PART 2: ",
   1000 * (x + 1) + 4 * (y + 1) + direction,
