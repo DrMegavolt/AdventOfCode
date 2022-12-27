@@ -26,45 +26,93 @@ describe("Change direction on command", () => {
 
   it("should turn from > to ^ on R", () => {
     direction = 0;
-    [newX, newY, newD] = processInstruction(map, "R", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "R",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(1);
   });
   it("should turn from ^ to < on R", () => {
     direction = 1;
-    [newX, newY, newD] = processInstruction(map, "R", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "R",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(2);
   });
 
   it("should turn from < to v on R", () => {
     direction = 2;
-    [newX, newY, newD] = processInstruction(map, "R", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "R",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(3);
   });
   it("should turn from v to > on R", () => {
     direction = 3;
-    [newX, newY, newD] = processInstruction(map, "R", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "R",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(0);
   });
 
   it("should turn from ^ to > on L", () => {
     direction = 1;
-    [newX, newY, newD] = processInstruction(map, "L", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "L",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(0);
   });
   it("should turn from < to ^ on L", () => {
     direction = 2;
-    [newX, newY, newD] = processInstruction(map, "L", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "L",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(1);
   });
 
   it("should turn from v to < on L", () => {
     direction = 3;
-    [newX, newY, newD] = processInstruction(map, "L", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "L",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(2);
   });
   it("should turn from > to v on L", () => {
     direction = 0;
-    [newX, newY, newD] = processInstruction(map, "L", x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: "L",
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(3);
   });
 });
@@ -91,7 +139,7 @@ describe("Horizontal Move", () => {
   // move right tests
   it("should move 2 steps to the right of Command 2", () => {
     direction = 0;
-    [newX, newY, newD] = processInstruction(map, 2, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 2, x, y, direction });
     expect(newD).toBe(0);
     expect(newX).toBe(0);
     expect(newY).toBe(2);
@@ -100,28 +148,40 @@ describe("Horizontal Move", () => {
     x = 1;
     y = 1;
     direction = 0;
-    [newX, newY, newD] = processInstruction(map, 20, x, y, direction, true);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 20,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(0);
     expect(newX).toBe(1);
     expect(newY).toBe(1);
   });
   it("should move 2 steps to the right of Command 300 because wall", () => {
     direction = 0;
-    [newX, newY, newD] = processInstruction(map, 300, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 300,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(0);
     expect(newX).toBe(0);
     expect(newY).toBe(2);
   });
   it("should move 2 steps to the right of Command 4 because hit the wall", () => {
     direction = 0;
-    [newX, newY, newD] = processInstruction(map, 4, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 4, x, y, direction });
     expect(newD).toBe(0);
     expect(newX).toBe(0);
     expect(newY).toBe(2);
   });
   it("should move 3 steps to the right of Command 4 because hit the wall", () => {
     direction = 0;
-    [newX, newY, newD] = processInstruction(map, 4, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 4, x, y, direction });
     expect(newD).toBe(0);
     expect(newX).toBe(0);
     expect(newY).toBe(2);
@@ -130,7 +190,7 @@ describe("Horizontal Move", () => {
     direction = 0;
     y = 4;
 
-    [newX, newY, newD] = processInstruction(map, 3, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 3, x, y, direction });
     expect(newD).toBe(0);
     expect(newX).toBe(0);
     expect(newY).toBe(2);
@@ -139,7 +199,13 @@ describe("Horizontal Move", () => {
     direction = 0;
     y = 4;
 
-    [newX, newY, newD] = processInstruction(map, 30, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 30,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(0);
     expect(newX).toBe(0);
     expect(newY).toBe(2);
@@ -149,7 +215,13 @@ describe("Horizontal Move", () => {
     y = 9;
     x = 2;
 
-    [newX, newY, newD] = processInstruction(map, 30, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 30,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(0);
     expect(newX).toBe(2);
     expect(newY).toBe(y);
@@ -159,7 +231,13 @@ describe("Horizontal Move", () => {
     y = 4;
     x = 2;
 
-    [newX, newY, newD] = processInstruction(map, 30, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 30,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(0);
     expect(newX).toBe(2);
     expect(newY).toBe(9);
@@ -171,7 +249,7 @@ describe("Horizontal Move", () => {
     x = 0;
     y = 2;
 
-    [newX, newY, newD] = processInstruction(map, 2, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 2, x, y, direction });
     expect(newD).toBe(2);
     expect(newX).toBe(0);
     expect(newY).toBe(0);
@@ -181,7 +259,7 @@ describe("Horizontal Move", () => {
     x = 0;
     y = 2;
 
-    [newX, newY, newD] = processInstruction(map, 3, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 3, x, y, direction });
     expect(newD).toBe(2);
     expect(newX).toBe(0);
     expect(newY).toBe(4);
@@ -191,7 +269,13 @@ describe("Horizontal Move", () => {
     x = 0;
     y = 2;
 
-    [newX, newY, newD] = processInstruction(map, 30, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 30,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(2);
     expect(newX).toBe(0);
     expect(newY).toBe(4);
@@ -201,7 +285,7 @@ describe("Horizontal Move", () => {
     x = 4;
     y = 2;
 
-    [newX, newY, newD] = processInstruction(map, 3, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 3, x, y, direction });
     expect(newD).toBe(2);
     expect(newX).toBe(x);
     expect(newY).toBe(0);
@@ -231,7 +315,7 @@ describe("Vertical Move", () => {
     x = 2;
     y = 2;
 
-    [newX, newY, newD] = processInstruction(map, 2, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 2, x, y, direction });
     expect(newD).toBe(3);
     expect(newX).toBe(0);
     expect(newY).toBe(2);
@@ -241,7 +325,7 @@ describe("Vertical Move", () => {
     x = 2;
     y = 2;
 
-    [newX, newY, newD] = processInstruction(map, 3, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 3, x, y, direction });
     expect(newD).toBe(3);
     expect(newX).toBe(4);
     expect(newY).toBe(2);
@@ -251,7 +335,13 @@ describe("Vertical Move", () => {
     x = 2;
     y = 2;
 
-    [newX, newY, newD] = processInstruction(map, 30, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 30,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(3);
     expect(newX).toBe(4);
     expect(newY).toBe(2);
@@ -261,7 +351,13 @@ describe("Vertical Move", () => {
     x = 4;
     y = 4;
 
-    [newX, newY, newD] = processInstruction(map, 30, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 30,
+      x,
+      y,
+      direction,
+    });
 
     expect(newD).toBe(3);
     expect(newX).toBe(0);
@@ -273,7 +369,7 @@ describe("Vertical Move", () => {
     direction = 1;
     x = 2;
     y = 1;
-    [newX, newY, newD] = processInstruction(map, 2, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 2, x, y, direction });
     expect(newD).toBe(1);
     expect(newX).toBe(4);
     expect(newY).toBe(y);
@@ -282,7 +378,7 @@ describe("Vertical Move", () => {
     direction = 1;
     x = 2;
     y = 2;
-    [newX, newY, newD] = processInstruction(map, 2, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({ map, instr: 2, x, y, direction });
     expect(newD).toBe(1);
     expect(newX).toBe(2);
     expect(newX).toBe(y);
@@ -291,7 +387,13 @@ describe("Vertical Move", () => {
     direction = 1;
     x = 2;
     y = 3;
-    [newX, newY, newD] = processInstruction(map, 20, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 20,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(1);
     expect(newX).toBe(4);
     expect(newY).toBe(y);
@@ -300,7 +402,13 @@ describe("Vertical Move", () => {
     direction = 1;
     x = 2;
     y = 1;
-    [newX, newY, newD] = processInstruction(map, 201, x, y, direction, false);
+    [newX, newY, newD] = processInstruction({
+      map,
+      instr: 201,
+      x,
+      y,
+      direction,
+    });
     expect(newD).toBe(1);
     expect(newX).toBe(3); // 5 rows, so 200 should wrap to 2 and 201 to 3
     expect(newY).toBe(y);

@@ -39,16 +39,41 @@ console.log("START", x, y);
 drawMap(map, " ", x, y);
 
 for (let instr of instructions) {
-  [x, y, direction] = processInstruction(map, instr, x, y, direction, debug);
+  [x, y, direction] = processInstruction({ map, instr, x, y, direction });
   if (map[x][y] !== ".") {
     console.log("Invalid position", instr, x, y, map[x][y], direction);
-    drawMap(map, " ", x, y, direction);
+    // drawMap(map, " ", x, y, direction);
     throw new Error("Invalid position");
   }
 }
 
+//159034
+let part1 = 1000 * (x + 1) + 4 * (y + 1) + direction;
+if (part1 !== 159034) {
+  throw new Error("Invalid part 1");
+}
+console.log("PART 1: ", part1, x, y, direction);
+
+x = 0;
+y = map[0].indexOf(".");
+direction = 0;
+for (let instr of instructions) {
+  [x, y, direction] = processInstruction({
+    map,
+    instr,
+    x,
+    y,
+    direction,
+    is3D: true,
+  });
+  if (map[x][y] !== ".") {
+    console.log("Invalid position", instr, x, y, map[x][y], direction);
+    // drawMap(map, " ", x, y, direction);
+    throw new Error("Invalid position");
+  }
+}
 console.log(
-  "PART 1: ",
+  "PART 2: ",
   1000 * (x + 1) + 4 * (y + 1) + direction,
   x,
   y,
