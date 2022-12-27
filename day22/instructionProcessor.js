@@ -8,29 +8,28 @@ export function processInstruction({
   is3D,
 }) {
   if (typeof instr === "number") {
-    debug && console.log("MOVE", instr);
+    // debug && console.log("MOVE", instr);
     let keepMoving = true;
     for (let steps = 0; steps < instr; steps++) {
-      debug && console.log("------ instr: ", instr, " steps: ", steps);
+      // debug && console.log("------ instr: ", instr, " steps: ", steps);
       [x, y, keepMoving, direction] = moveOne({ map, x, y, direction, is3D });
 
       if (!keepMoving) {
-        // console.log("BREAK", x, y, keepMoving, steps, instr, direction);
         break;
       }
     }
-    debug && drawMap(map, " ", x, y, direction);
+    // debug && drawMap(map, " ", x, y, direction);
   }
 
   if (instr === "R") {
     // draw && console.log("turn clockwise: R");
     direction = (direction + 1) % 4; // turn right 90°
-    debug && drawMap(map, " ", x, y, direction);
+    // debug && drawMap(map, " ", x, y, direction);
   }
   if (instr === "L") {
     // draw && console.log("turn counter-clockwise: L");
     direction = (direction + 3) % 4; // turn left 90°
-    debug && drawMap(map, " ", x, y, direction);
+    // debug && drawMap(map, " ", x, y, direction);
   }
   return [x, y, direction];
 }
@@ -88,6 +87,15 @@ function wrap({ map, x, y, direction, newX, newY }) {
   }
 }
 function validateMove({ map, x, y, direction, newX, newY, newDirection }) {
+  let originalPlane = identifyPlane(map, { x, y });
+  let newPlane = identifyPlane(map, { x: newX, y: newY });
+  console.log(
+    "WR FROM",
+    originalPlane,
+    "TO",
+    newPlane,
+    `x=${x}, y=${y} dir=${direction}-> newX=${newX}, newY=${newY} newDir=${newDirection}`
+  );
   if (map[newX][newY] === "#") {
     return [x, y, false, direction];
   } else {
@@ -96,7 +104,7 @@ function validateMove({ map, x, y, direction, newX, newY, newDirection }) {
 }
 
 function wrap3D({ map, x, y, direction, newX, newY }) {
-  console.log("wrap3D", x, y, direction, newX, newY);
+  // console.log("wrap3D", x, y, direction, newX, newY);
   let newDirection = direction;
   let plane = identifyPlane(map, { x, y });
   if (direction === 0) {
@@ -187,7 +195,7 @@ function wrap3D({ map, x, y, direction, newX, newY }) {
     // x=110, y=0 -> x=40, y=50 dir right
     if (plane === "LEFT") {
       newY = 50;
-      newX = 150 - newX;
+      newX = 149 - newX;
       newDirection = 0;
       return validateMove({ map, x, y, direction, newX, newY, newDirection });
     }
@@ -253,10 +261,12 @@ function moveOne({ map, x, y, direction, debug, is3D }) {
       break;
   }
   if (map[newX] === undefined || map[newX][newY] === undefined) {
-    debug && console.log("out of bounds", newX, newY, direction);
+    console.log("out of bounds", newX, newY, direction);
     // search for map wrap
     if (is3D) {
-      return wrap3D({ map, x, y, direction, newX, newY });
+      let newCoords = wrap3D({ map, x, y, direction, newX, newY });
+      // console.log("WRAPPED: ", newCoords);
+      return newCoords;
     }
     return [...wrap({ map, x, y, direction, newX, newY }), direction];
   }

@@ -36,27 +36,28 @@ let direction = 0; // right
 let x = 0;
 let y = map[0].indexOf(".");
 console.log("START", x, y);
-drawMap(map, " ", x, y);
+// drawMap(map, " ", x, y);
 
-for (let instr of instructions) {
-  [x, y, direction] = processInstruction({ map, instr, x, y, direction });
-  if (map[x][y] !== ".") {
-    console.log("Invalid position", instr, x, y, map[x][y], direction);
-    // drawMap(map, " ", x, y, direction);
-    throw new Error("Invalid position");
-  }
-}
+// for (let instr of instructions) {
+//   [x, y, direction] = processInstruction({ map, instr, x, y, direction });
+//   if (map[x][y] !== ".") {
+//     console.log("Invalid position", instr, x, y, map[x][y], direction);
+//     // drawMap(map, " ", x, y, direction);
+//     throw new Error("Invalid position");
+//   }
+// }
 
-//159034
-let part1 = 1000 * (x + 1) + 4 * (y + 1) + direction;
-if (part1 !== 159034) {
-  throw new Error("Invalid part 1");
-}
-console.log("PART 1: ", part1, x, y, direction);
+// //159034
+// let part1 = 1000 * (x + 1) + 4 * (y + 1) + direction;
+// if (part1 !== 159034) {
+//   throw new Error("Invalid part 1");
+// }
+// console.log("PART 1: ", part1, x, y, direction);
 
 x = 0;
 y = map[0].indexOf(".");
 direction = 0;
+console.log(instructions.length);
 for (let instr of instructions) {
   [x, y, direction] = processInstruction({
     map,
@@ -65,6 +66,7 @@ for (let instr of instructions) {
     y,
     direction,
     is3D: true,
+    debug: true,
   });
   if (map[x][y] !== ".") {
     console.log("Invalid position", instr, x, y, map[x][y], direction);
@@ -72,6 +74,7 @@ for (let instr of instructions) {
     throw new Error("Invalid position");
   }
 }
+// 143034 is too low
 console.log(
   "PART 2: ",
   1000 * (x + 1) + 4 * (y + 1) + direction,
