@@ -213,7 +213,7 @@ function wrap3D({ map, x, y, direction, newX, newY }) {
     // TOP side of the LEFT plane is the flipped RIGHT side of the FRONT plane
     // x=100 y=40 -> x=60 y=50 dir right
     if (plane === "LEFT") {
-      newX = 100 - newY;
+      newX = 50 + newY;
       newY = 50;
       newDirection = 0;
       return validateMove({ map, x, y, direction, newX, newY, newDirection });
