@@ -77,19 +77,17 @@ function tetris(jetPattern, jetIndex, maxRocks) {
   let rockRepeatPeriod;
   let rockRepeatOffset;
   let offsetsCache = new Map();
+  let debug = false;
   while (rockCounter <= maxRocks) {
     offsetsCache.set(rockCounter, caveHeight(cave));
     let type = rockCounter % 5;
     let rock = rockTypes[type];
-    if (type === 2 && droppedHeight === undefined) {
+    if (type === 0 && droppedHeight === undefined) {
       // horizontal line is the most wide rock, low chance of overlap
       let k = `${rockCounter % 5}=${jetIndex % jetPattern.length}`;
-      console.log(k);
 
       let v = sameRockSameJet.get(k);
       if (v) {
-        printCave(cave);
-        console.log(yOffset, v[1], yOffset - v[1]);
         rockRepeatPeriod = rockCounter - v[0];
         rockRepeatOffset = yOffset - v[1];
 
@@ -107,6 +105,7 @@ function tetris(jetPattern, jetIndex, maxRocks) {
       }
       sameRockSameJet.set(k, [rockCounter, yOffset]);
     }
+
     let xOffset = 2; // 2 positions from the left wall
     yOffset = caveHeight(cave) + 3; // new rock 3 positions higher than the highest rock
     let move = 0;
@@ -146,11 +145,7 @@ function tetris(jetPattern, jetIndex, maxRocks) {
 // printCave(cave);
 console.log("PART 1", caveHeight(cave) + droppedHeight);
 
-// let height1Quadrillion =
-//   Math.floor(maxRocks2 / rockRepeatPeriod) * rockRepeatOffset +
-//   offsetBeforePatternStart;
-// console.log("PART 2: height of 1 quadrillion rocks", height1Quadrillion);
-//1526744186040 too low rock 0 ; 1526744186040; rock/jet repeat 1720;  offset 2626; rocks before 1440 with offset 2193
+//1526744186042 correct for type 0
 //1527906976736 incorre rock 1 ; 1527906976736; rock/jet repeat 1720;  offset 2628; rocks before 1440 with offset 2193
 //1527325581388 incorre rock 2 ; 1527325581388; rock/jet repeat 1720;  offset 2627; rocks before 1440 with offset 2193
 // but rock 2 gives the best end pattern, no need to account for merge shift
