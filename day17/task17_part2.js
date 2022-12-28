@@ -1,18 +1,24 @@
 import { readDataLines } from "../common/index.js";
 // parse input
-const lines = readDataLines("day17/input_test.txt");
+const lines = readDataLines("day17/input.txt");
 let jetPattern = lines[0].split("").map((c) => (c === "<" ? -1 : 1));
 let jetIndex = 0;
 let maxRocks2 = 1000000000000;
 let maxRocks = 2022;
 
-var { cave, rock4repeatPeriod, rock4repeatOffset, offsetsCache } = tetris(
-  jetPattern,
-  jetIndex,
-  maxRocks
-);
+var { cave, droppedHeight } = tetris(jetPattern, jetIndex, maxRocks2);
+function caveHeight(cave) {
+  let cols = cave.map((col) => col.lastIndexOf("#"));
+  return Math.max(...cols) + 1;
+}
 
-function tetris(jetPattern, jetIndex, maxRocks = 2022) {
+function tetris(jetPattern, jetIndex, maxRocks) {
+  function nextJet() {
+    jetIndex = jetIndex % jetPattern.length;
+    let next = jetPattern[jetIndex];
+    jetIndex++;
+    return next;
+  }
   function checkNextStepValid(rock, xOffset, yOffset, move) {
     //   console.log("CHECK NEXT STEP VALID", xOffset, yOffset, move);
     let yShift = yOffset - move;
@@ -66,39 +72,43 @@ function tetris(jetPattern, jetIndex, maxRocks = 2022) {
   let cave = new Array(7).fill().map(() => []);
   let rockCounter = 1;
   let yOffset = 4;
-
+  let droppedHeight;
   let sameRockSameJet = new Map();
-  let rock4repeatPeriod;
-  let rock4repeatOffset;
+  let rockRepeatPeriod;
+  let rockRepeatOffset;
   let offsetsCache = new Map();
   while (rockCounter <= maxRocks) {
     offsetsCache.set(rockCounter, caveHeight(cave));
     let type = rockCounter % 5;
     let rock = rockTypes[type];
-    if (type === 2 && rock4repeatPeriod === undefined) {
+    if (type === 2 && droppedHeight === undefined) {
       // horizontal line is the most wide rock, low chance of overlap
       let k = `${rockCounter % 5}=${jetIndex % jetPattern.length}`;
+      console.log(k);
+
       let v = sameRockSameJet.get(k);
       if (v) {
-        console.log(
-          "SAME ROCK SAME JET",
-          k,
-          v,
-          rockCounter,
-          rockCounter - v[0]
-        );
+        printCave(cave);
         console.log(yOffset, v[1], yOffset - v[1]);
-        rock4repeatPeriod = rockCounter - v[0];
-        rock4repeatOffset = yOffset - v[1];
-        // printCave();
-        // break;
+        rockRepeatPeriod = rockCounter - v[0];
+        rockRepeatOffset = yOffset - v[1];
+
+        // pattern starts at rockCounter
+        // each period is rockRepeatPeriod
+        // each time tetris is getting higher by rockRepeatOffset
+        // we can skip computing the next rocks as long as we fit full pattern before maxRocks
+        let skips = Math.floor((maxRocks - rockCounter) / rockRepeatPeriod);
+        console.log("SKIPS", skips);
+        rockCounter += skips * rockRepeatPeriod;
+        // yOffset += skips * rockRepeatOffset;
+        droppedHeight = skips * rockRepeatOffset;
+        console.log("NEW ROCK COUNTER", rockCounter);
+        console.log("Dropped OFFSET", droppedHeight);
       }
       sameRockSameJet.set(k, [rockCounter, yOffset]);
-      // draw(rock, 2, yOffset, 0, "T");
     }
     let xOffset = 2; // 2 positions from the left wall
-    yOffset =
-      cave.reduce((max, col) => Math.max(max, col.lastIndexOf("#") + 1), 0) + 3;
+    yOffset = caveHeight(cave) + 3; // new rock 3 positions higher than the highest rock
     let move = 0;
     while (true) {
       let j = nextJet();
@@ -129,46 +139,17 @@ function tetris(jetPattern, jetIndex, maxRocks = 2022) {
   }
   return {
     cave,
-    rock4repeatPeriod,
-    rock4repeatOffset,
-    offsetsCache,
+    droppedHeight,
   };
 }
 
-function caveHeight(cave) {
-  let cols = cave.map((col) => col.lastIndexOf("#"));
-  return Math.max(...cols) + 1;
-}
-printCave(cave);
-console.log("PART 1", caveHeight(cave));
+// printCave(cave);
+console.log("PART 1", caveHeight(cave) + droppedHeight);
 
-// printCave();
-console.log(
-  "PART 2: period of rock 4 meets the same jet pattern",
-  rock4repeatPeriod
-);
-console.log(
-  "PART 2: offset of rock 4 meets the same jet pattern",
-  rock4repeatOffset
-);
-
-let rocksBeforePatternStart =
-  maxRocks2 - Math.floor(maxRocks2 / rock4repeatPeriod) * rock4repeatPeriod;
-console.log(
-  "PART 2: rocks that needs to be dropped before pattern starts",
-  rocksBeforePatternStart
-);
-
-let offsetBeforePatternStart = offsetsCache.get(rocksBeforePatternStart);
-console.log(
-  "PART 2: offset of rock that needs to be dropped before pattern starts",
-  offsetBeforePatternStart
-);
-
-let height1Quadrillion =
-  Math.floor(maxRocks2 / rock4repeatPeriod) * rock4repeatOffset +
-  offsetBeforePatternStart;
-console.log("PART 2: height of 1 quadrillion rocks", height1Quadrillion);
+// let height1Quadrillion =
+//   Math.floor(maxRocks2 / rockRepeatPeriod) * rockRepeatOffset +
+//   offsetBeforePatternStart;
+// console.log("PART 2: height of 1 quadrillion rocks", height1Quadrillion);
 //1526744186040 too low rock 0 ; 1526744186040; rock/jet repeat 1720;  offset 2626; rocks before 1440 with offset 2193
 //1527906976736 incorre rock 1 ; 1527906976736; rock/jet repeat 1720;  offset 2628; rocks before 1440 with offset 2193
 //1527325581388 incorre rock 2 ; 1527325581388; rock/jet repeat 1720;  offset 2627; rocks before 1440 with offset 2193
@@ -195,10 +176,4 @@ function printCave(cave) {
     console.log(row + "|");
   }
   console.log("+" + "".padStart(cave.length, "-") + "+");
-}
-function nextJet() {
-  jetIndex = jetIndex % jetPattern.length;
-  let next = jetPattern[jetIndex];
-  jetIndex++;
-  return next;
 }
