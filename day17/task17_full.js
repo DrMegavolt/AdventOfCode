@@ -1,6 +1,6 @@
 import { readDataLines } from "../common/index.js";
 // parse input
-const lines = readDataLines("day17/input.txt");
+const lines = readDataLines("day17/input_test.txt");
 let jetPattern = lines[0].split("").map((c) => (c === "<" ? -1 : 1));
 const rockTypes = {
   0: [
@@ -102,12 +102,12 @@ while (rockCounter <= maxRocks + 1) {
 
       draw(rock, xOffset, yOffset, move, "#"); // freeze rock
       yOffset = Math.max(yOffset, yOffset - move + rock[0].length);
-      console.log(
-        "Y OFFSET",
-        yOffset,
-        yOffset - move + rock[0].length,
-        rock[0].length
-      );
+      // console.log(
+      //   "Y OFFSET",
+      //   yOffset,
+      //   yOffset - move + rock[0].length,
+      //   rock[0].length
+      // );
       //   printCave();
       break; // move to next rock
     }

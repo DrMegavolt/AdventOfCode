@@ -25,7 +25,7 @@
     "day16_2": "node --max-old-space-size=16000 day16/task16_part2.js",
     "day17": "NODE_ENV=production node  day17/task17.js",
     "day17_1": "NODE_ENV=production node  day17/task17_1.js",
-    "day17b": "node  --inspect-brk  day17/task17.js",
+    "day17_full": "NODE_ENV=production node  day17/task17_full.js",
     "day17bun": "bun  day17/task17.js",
     "day17p": "NODE_ENV=production node  --prof day17/task17.js",
     "day18": "node --stack-size=65500  day18/task18.js",

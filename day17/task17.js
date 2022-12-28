@@ -33,8 +33,8 @@ let superCave = new Array(7).fill();
 let rockCounter = 1;
 let yOffset = 3;
 
-// let maxRocks = 2022;
-let maxRocks = 1000000000000;
+let maxRocks = 2022;
+// let maxRocks = 1000000000000;
 // let maxRocks = 10000000;
 work();
 
