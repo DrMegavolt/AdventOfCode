@@ -87,15 +87,15 @@ function wrap({ map, x, y, direction, newX, newY }) {
   }
 }
 function validateMove({ map, x, y, direction, newX, newY, newDirection }) {
-  let originalPlane = identifyPlane(map, { x, y });
-  let newPlane = identifyPlane(map, { x: newX, y: newY });
-  console.log(
-    "WR FROM",
-    originalPlane,
-    "TO",
-    newPlane,
-    `x=${x}, y=${y} dir=${direction}-> newX=${newX}, newY=${newY} newDir=${newDirection}`
-  );
+  // let originalPlane = identifyPlane(map, { x, y });
+  // let newPlane = identifyPlane(map, { x: newX, y: newY });
+  // console.log(
+  //   "WR FROM",
+  //   originalPlane,
+  //   "TO",
+  //   newPlane,
+  //   `x=${x}, y=${y} dir=${direction}-> newX=${newX}, newY=${newY} newDir=${newDirection}`
+  // );
   if (map[newX][newY] === "#") {
     return [x, y, false, direction];
   } else {
@@ -130,7 +130,7 @@ function wrap3D({ map, x, y, direction, newX, newY }) {
     // x=140, y=99 -> x=10, y=149 dir left
     if (plane === "BOTTOM") {
       newY = 149;
-      newX = 150 - newX;
+      newX = 149 - newX;
       newDirection = 2;
       return validateMove({ map, x, y, direction, newX, newY, newDirection });
     }
@@ -261,7 +261,7 @@ function moveOne({ map, x, y, direction, debug, is3D }) {
       break;
   }
   if (map[newX] === undefined || map[newX][newY] === undefined) {
-    console.log("out of bounds", newX, newY, direction);
+    // console.log("out of bounds", newX, newY, direction);
     // search for map wrap
     if (is3D) {
       let newCoords = wrap3D({ map, x, y, direction, newX, newY });

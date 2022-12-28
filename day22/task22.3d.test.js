@@ -628,7 +628,7 @@ describe("Moving to the RIGHT from BOTTOM plane", () => {
   // x=140, y=99 -> x=10, y=150 dir left
   it("should wrap in the RIGHT plane", () => {
     start = { x: 140, y: 99 };
-    end = { x: 10, y: 149, d: 2 };
+    end = { x: 9, y: 149, d: 2 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -648,7 +648,7 @@ describe("Moving to the RIGHT from BOTTOM plane", () => {
   });
   it("should wrap in the RIGHT plane and keep moving", () => {
     start = { x: 140, y: 99 };
-    end = { x: 10, y: 140, d: 2 };
+    end = { x: 9, y: 140, d: 2 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -668,7 +668,7 @@ describe("Moving to the RIGHT from BOTTOM plane", () => {
   });
   it("should wrap in the RIGHT plane and keep moving untill the wall", () => {
     start = { x: 140, y: 99 };
-    end = { x: 10, y: 140, d: 2 };
+    end = { x: 9, y: 140, d: 2 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y - 1] = "#";
     // print(map);
@@ -688,7 +688,7 @@ describe("Moving to the RIGHT from BOTTOM plane", () => {
   });
   it("should not wrap in the RIGHT plane if next is wall", () => {
     start = { x: 140, y: 99 };
-    end = { x: 10, y: 149, d: 2 };
+    end = { x: 9, y: 149, d: 2 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = "#";
     // print(map);
@@ -1161,7 +1161,7 @@ describe("REAL MAP TEST CASES", () => {
   });
   //LEFT TO FRONT x=100, y=47 dir=3-> newX=53, newY=50 newDir=0
   it("LEFT TO FRONT x=100, y=47 dir=3-> newX=53, newY=50 newDir=0", () => {
-    dir = 3; // left
+    dir = 3; // up
     start = { x: 100, y: 47 };
     end = { x: 97, y: 50, d: 0 };
     map[start.x][start.y] = directionToChar(dir);
@@ -1182,11 +1182,11 @@ describe("REAL MAP TEST CASES", () => {
     expect(y).toBe(end.y);
     expect(d).toBe(end.d); // right
   });
-  // LEFT TO BOTTOM x=100, y=0 dir=3-> newX=50, newY=50 newDir=0
-  it("LEFT TO FRONT x=100, y=0 dir=3-> newX=50, newY=50 newDir=0", () => {
-    dir = 3; // left
-    start = { x: 100, y: 0 };
-    end = { x: 50, y: 50, d: 0 };
+  // LEFT TO BOTTOM x=100, y=1 dir=3-> newX=51, newY=50 newDir=0
+  it("LEFT TO FRONT x=100, y=1 dir=3-> newX=51, newY=50 newDir=0", () => {
+    dir = 3; // up
+    start = { x: 100, y: 1 };
+    end = { x: 51, y: 50, d: 0 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -1205,36 +1205,11 @@ describe("REAL MAP TEST CASES", () => {
     expect(identifyPlane(map, start)).toBe("LEFT");
     expect(identifyPlane(map, end)).toBe("FRONT");
   });
-
-  // LEFT TO TOP x=104, y=0 dir=2-> newX=45, newY=50 newDir=0
-  it("LEFT TO TOP x=104, y=0 dir=2-> newX=45, newY=50 newDir=0", () => {
-    dir = 2; // left
-    start = { x: 104, y: 0 };
-    end = { x: 45, y: 50, d: 0 };
-    map[start.x][start.y] = directionToChar(dir);
-    map[end.x][end.y] = directionToChar(end.d);
-    // print(map);
-
-    let [x, y, d] = processInstruction({
-      map,
-      instr: 1,
-      x: start.x,
-      y: start.y,
-      direction: dir,
-      is3D: true,
-    });
-    expect(identifyPlane(map, start)).toBe("LEFT");
-    expect(identifyPlane(map, end)).toBe("TOP");
-    expect(x).toBe(end.x);
-    expect(y).toBe(end.y);
-    expect(d).toBe(end.d); // right
-  });
-
-  // FROM RIGHT TO FRONT x=49, y=116 dir=1-> newX=66, newY=99 newDir=2
-  it("FROM RIGHT TO FRONT x=49, y=116 dir=1-> newX=66, newY=99 newDir=2", () => {
+  // RIGHT TO FRONT x=49, y=102 dir=1-> newX=52, newY=99 newDir=2
+  it("RIGHT TO FRONT x=49, y=102 dir=1-> newX=52, newY=99 newDir=2", () => {
     dir = 1; // down
-    start = { x: 49, y: 116 };
-    end = { x: 66, y: 99, d: 2 };
+    start = { x: 49, y: 102 };
+    end = { x: 52, y: 99, d: 2 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -1257,8 +1232,8 @@ describe("REAL MAP TEST CASES", () => {
   // RIGHT TO BOTTOM x=0, y=149 dir=0-> newX=149, newY=99 newDir=2
   it("RIGHT TO BOTTOM x=0, y=149 dir=0-> newX=149, newY=99 newDir=2", () => {
     dir = 0; // down
-    start = { x: 0, y: 149 };
-    end = { x: 149, y: 99, d: 2 };
+    start = { x: 1, y: 149 };
+    end = { x: 148, y: 99, d: 2 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -1281,8 +1256,8 @@ describe("REAL MAP TEST CASES", () => {
   // RIGHT TO BACK x=0, y=149 dir=3-> newX=199, newY=22 newDir=3
   it("RIGHT TO BACK x=0, y=149 dir=3-> newX=199, newY=22 newDir=3", () => {
     dir = 3; // left
-    start = { x: 0, y: 149 };
-    end = { x: 199, y: 49, d: 3 };
+    start = { x: 0, y: 148 };
+    end = { x: 199, y: 48, d: 3 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -1329,8 +1304,8 @@ describe("REAL MAP TEST CASES", () => {
   // BACK TO RIGHT x=199, y=49 dir=1-> newX=0, newY=149 newDir=1
   it("BACK TO RIGHT x=199, y=49 dir=1-> newX=0, newY=149 newDir=1", () => {
     dir = 1; // down
-    start = { x: 199, y: 49 };
-    end = { x: 0, y: 149, d: 1 };
+    start = { x: 199, y: 48 };
+    end = { x: 0, y: 148, d: 1 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -1352,8 +1327,31 @@ describe("REAL MAP TEST CASES", () => {
   // BACK TO TOP x=150, y=0 dir=2-> newX=0, newY=50 newDir=1
   it("BACK TO TOP x=150, y=0 dir=2-> newX=0, newY=50 newDir=1", () => {
     dir = 2; // up
-    start = { x: 150, y: 0 };
-    end = { x: 0, y: 50, d: 1 };
+    start = { x: 151, y: 0 };
+    end = { x: 0, y: 51, d: 1 };
+    map[start.x][start.y] = directionToChar(dir);
+    map[end.x][end.y] = directionToChar(end.d);
+    // print(map);
+
+    let [x, y, d] = processInstruction({
+      map,
+      instr: 1,
+      x: start.x,
+      y: start.y,
+      direction: dir,
+      is3D: true,
+    });
+    expect(identifyPlane(map, start)).toBe("BACK");
+    expect(identifyPlane(map, end)).toBe("TOP");
+    expect(x).toBe(end.x);
+    expect(y).toBe(end.y);
+    expect(d).toBe(end.d); // right
+  });
+  // BACK TO TOP x=176, y=0 dir=2-> newX=0, newY=76 newDir=1
+  it("BACK TO TOP x=176, y=0 dir=2-> newX=0, newY=76 newDir=1", () => {
+    dir = 2; //left
+    start = { x: 176, y: 0 };
+    end = { x: 0, y: 76, d: 1 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
     // print(map);
@@ -1399,12 +1397,12 @@ describe("REAL MAP TEST CASES", () => {
 
   // TOP TO BACK x=0, y=50 dir=3-> newX=150, newY=0 newDir=0
   it("TOP TO BACK x=0, y=50 dir=3-> newX=150, newY=0 newDir=0", () => {
-    dir = 3; //left
-    start = { x: 0, y: 50 };
-    end = { x: 150, y: 0, d: 0 };
+    dir = 3; // up
+    start = { x: 0, y: 51 };
+    end = { x: 151, y: 0, d: 0 };
     map[start.x][start.y] = directionToChar(dir);
     map[end.x][end.y] = directionToChar(end.d);
-    print(map);
+    // print(map);
 
     let [x, y, d] = processInstruction({
       map,
@@ -1419,5 +1417,124 @@ describe("REAL MAP TEST CASES", () => {
     expect(x).toBe(end.x);
     expect(y).toBe(end.y);
     expect(d).toBe(end.d); // right
+  });
+
+  // TOP TO BACK x=0, y=99 dir=3-> newX=199, newY=0 newDir=0
+  it("TOP TO BACK x=0, y=99 dir=3-> newX=199, newY=0 newDir=0", () => {
+    dir = 3; //left
+    start = { x: 0, y: 99 };
+    end = { x: 199, y: 0, d: 0 };
+    map[start.x][start.y] = directionToChar(dir);
+    map[end.x][end.y] = directionToChar(end.d);
+    // print(map);
+
+    let [x, y, d] = processInstruction({
+      map,
+      instr: 1,
+      x: start.x,
+      y: start.y,
+      direction: dir,
+      is3D: true,
+    });
+    expect(identifyPlane(map, start)).toBe("TOP");
+    expect(identifyPlane(map, end)).toBe("BACK");
+    expect(x).toBe(end.x);
+    expect(y).toBe(end.y);
+    expect(d).toBe(end.d); // right
+  });
+
+  // FRONT TO RIGHT x=98, y=99 dir=0-> newX=49, newY=148 newDir=3
+  it("FRONT TO RIGHT x=98, y=99 dir=0-> newX=49, newY=148 newDir=3", () => {
+    dir = 0; //right
+    start = { x: 98, y: 99 };
+    end = { x: 49, y: 148, d: 3 };
+    map[start.x][start.y] = directionToChar(dir);
+    map[end.x][end.y] = directionToChar(end.d);
+    print(map);
+
+    let [x, y, d] = processInstruction({
+      map,
+      instr: 1,
+      x: start.x,
+      y: start.y,
+      direction: dir,
+      is3D: true,
+    });
+    expect(identifyPlane(map, start)).toBe("FRONT");
+    expect(identifyPlane(map, end)).toBe("RIGHT");
+    expect(x).toBe(end.x);
+    expect(y).toBe(end.y);
+    expect(d).toBe(end.d); // up
+  });
+
+  // FRONT TO LEFT x=98, y=50 dir=2-> newX=100, newY=48 newDir=1
+  it("FRONT TO LEFT x=98, y=50 dir=2-> newX=100, newY=48 newDir=1", () => {
+    dir = 2; //left
+    start = { x: 98, y: 50 };
+    end = { x: 100, y: 48, d: 1 };
+    map[start.x][start.y] = directionToChar(dir);
+    map[end.x][end.y] = directionToChar(end.d);
+    // print(map);
+
+    let [x, y, d] = processInstruction({
+      map,
+      instr: 1,
+      x: start.x,
+      y: start.y,
+      direction: dir,
+      is3D: true,
+    });
+    expect(identifyPlane(map, start)).toBe("FRONT");
+    expect(identifyPlane(map, end)).toBe("LEFT");
+    expect(x).toBe(end.x);
+    expect(y).toBe(end.y);
+    expect(d).toBe(end.d); // right
+  });
+
+  //BOTTOM TO RIGHT x=134, y=99 dir=0-> newX=16, newY=149 newDir=2
+  it("BOTTOM TO RIGHT x=134, y=99 dir=0-> newX=16, newY=149 newDir=2", () => {
+    dir = 0; //right
+    start = { x: 149, y: 99 };
+    end = { x: 0, y: 149, d: 2 };
+    map[start.x][start.y] = directionToChar(dir);
+    map[end.x][end.y] = directionToChar(end.d);
+    // print(map);
+
+    let [x, y, d] = processInstruction({
+      map,
+      instr: 1,
+      x: start.x,
+      y: start.y,
+      direction: dir,
+      is3D: true,
+    });
+    expect(identifyPlane(map, start)).toBe("BOTTOM");
+    expect(identifyPlane(map, end)).toBe("RIGHT");
+    expect(x).toBe(end.x);
+    expect(y).toBe(end.y);
+    expect(d).toBe(end.d); // up
+  });
+  // BOTTOM TO BACK x=149, y=69 dir=1-> newX=169, newY=49 newDir=2
+  it("BOTTOM TO BACK x=149, y=69 dir=1-> newX=169, newY=49 newDir=2", () => {
+    dir = 1; //right
+    start = { x: 149, y: 69 };
+    end = { x: 169, y: 49, d: 2 };
+    map[start.x][start.y] = directionToChar(dir);
+    map[end.x][end.y] = directionToChar(end.d);
+    // print(map);
+
+    let [x, y, d] = processInstruction({
+      map,
+      instr: 1,
+      x: start.x,
+      y: start.y,
+      direction: dir,
+      is3D: true,
+    });
+    expect(identifyPlane(map, start)).toBe("BOTTOM");
+    expect(identifyPlane(map, end)).toBe("BACK");
+    expect(x).toBe(end.x);
+    expect(y).toBe(end.y);
+    expect(d).toBe(end.d); // up
   });
 });
