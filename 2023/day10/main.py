@@ -1,7 +1,8 @@
 import os
 import collections
+from time import sleep
 folder = os.path.dirname(__file__)
-m = open(folder +  "/input1.txt", "r").read().splitlines()
+m = open(folder +  "/input7.txt", "r").read().splitlines()
 
 width = len(m[0])
 height = len(m)
@@ -32,10 +33,8 @@ def print_map_zoom(m, pos_x, pos_y, zoom, just=5):
         print()
 
 distances = []
-visited = []
 for y in range(height):
     distances.append([0] * width)
-    visited.append([0] * width)
     for x in range(width):
         if m[y][x] == 'S':
             start = [x,y]
@@ -45,11 +44,6 @@ print("START:", start)
 # print_map(m)
 next_steps = collections.deque()
 def walk(x, y, distance):
-    # print()
-    # print("WALK:", m[y][x], x,y, distance, distances[y][x])
-    # print_map_zoom(distances,x,y, 3)
-    # print_map_zoom(m,x,y, 3, 3)
-
     if x < 0 or x >= width or y < 0 or y >= height:
         return None
     if m[y][x] == '.':
@@ -83,81 +77,132 @@ def walk(x, y, distance):
         next_steps.append([x, y+1, distance])
 
 # only 2 directions have connections
+def init_deque(start, q):
+    if m[start[1]][start[0]-1] in ['-', 'L', 'F']:    
+        q.append([start[0]-1, start[1], 1])
+    if m[start[1]][start[0]+1] in ['-', 'J', '7']:
+        q.append([start[0]+1, start[1], 1])
+    if m[start[1]-1][start[0]] in ['|', 'F', '7']:
+        q.append([start[0], start[1]-1, 1])
+    if m[start[1]+1][start[0]] in ['|', 'L', 'J']:
+        q.append([start[0], start[1]+1, 1])
 
-if m[start[1]][start[0]-1] in ['-', 'L', 'F']:    
-    next_steps.append([start[0]-1, start[1], 1])
-if m[start[1]][start[0]+1] in ['-', 'J', '7']:
-    next_steps.append([start[0]+1, start[1], 1])
-if m[start[1]-1][start[0]] in ['|', 'F', '7']:
-    next_steps.append([start[0], start[1]-1, 1])
-if m[start[1]+1][start[0]] in ['|', 'L', 'J']:
-    next_steps.append([start[0], start[1]+1, 1])
+init_deque(start, next_steps)
 while len(next_steps) > 0:
     [x, y, distance] = next_steps.popleft()
     walk(x, y, distance)
 # print_map(distances)
-print("PART1:", max(map(max, distances)))
-
-# print_map(m)
-dots = []
+max_distance = 0
+max_distance_pos = [0,0]
 for y in range(height):
     for x in range(width):
-        if m[y][x] == '.':
-            dots.append([x,y])
+        if distances[y][x] > max_distance:
+            max_distance = distances[y][x]
+            max_distance_pos = [x,y]
+print("PART1: end pos = ", max_distance_pos)
+print("PART1:", max_distance)
 
-#         if distances[y][x] > 0:
-#             continue
-# print(dots)
+def walk_loop(x1, y1, path):
+    pos_x = x1
+    pos_y = y1
+    while m[pos_y][pos_x] != 'S':
+        # sleep(0.1)
+        prev = path[-1]
+        # print("walk_loop:", pos_x, pos_y, prev, m[pos_y][pos_x])
+        path.append([pos_x, pos_y])
+        if m[pos_y][pos_x] == '-':
+            if prev[0] == pos_x-1: # came from left
+                pos_x +=1 # go right
+            else:
+                pos_x -=1  # go left
+        elif m[pos_y][pos_x] == '|':
+            if prev[1] == pos_y-1: # came from up
+                pos_y = pos_y+1 # go down
+            else:
+                pos_y = pos_y-1 # go up
+        elif m[pos_y][pos_x] == 'L':
+            if prev[0] == pos_x+1: # came from right
+                pos_y = pos_y-1 # go up
+            else:
+                pos_x+=1 # go right
+        elif m[pos_y][pos_x] == 'J':
+            if prev[0] == pos_x-1: # came from left
+                pos_y = pos_y-1 # go up
+            else:
+                pos_x=pos_x-1 # go left
+        elif m[pos_y][pos_x] == '7':
+            if prev[1] == pos_y+1: # came from down
+                pos_x=pos_x-1 # go left
+            else:
+                pos_y = pos_y+1 # go down
+        elif m[pos_y][pos_x] == 'F':
+            if prev[1] == pos_y+1: # came from down
+                pos_x+=1 # go right
+            else:
+                pos_y = pos_y+1 # go down
+        # print('NEXT', pos_x, pos_y,  prev, m[pos_y][pos_x])
+    return path
 
-q = collections.deque(dots)
+initial_directions = collections.deque()
+init_deque(start, initial_directions)
 
-def walk_cavity(x, y, other_spaces):
-    # check borders
-
-    if x < 0 or x >= width or y < 0 or y >= height:
-        return []
-    if  visited[y][x] == 1:
-        return []
-    if m[y][x] == '.':
-        visited[y][x] = 1
-        result = [[x,y]]
-        for j in range(-1,2):
-            for i in range(-1,2):
-                a = walk_cavity(x+i, y+j, [])
-                result.extend(a)
-        return result
-    return []
-
-cavities = []
-while len(q) > 0:
-    [x, y] = q.popleft()
-    cvt = walk_cavity(x, y, [])
-    if len(cvt) > 0:
-        cavities.append(cvt)
-
-escapable = dict()
-
-def mark_cavity(id, symbol='0'):
-    for [x,y] in cavities[id]:
-        m[y] = m[y][:x] + symbol + m[y][x+1:]
-# check if cavities are escapable directly to the border
-for id, c in enumerate(cavities):
-    for [x,y] in c:
-        if y == 0 or y == height-1 or x == 0 or x == width-1:
-            escapable[id] = True
-            mark_cavity(id, '0')
-            break
-
-# check if cavities are escapable by squeezing in between pipes
-# it can escape if it can reach a cavity that is escapable (marked with '0')
-# if it can reach the border, it is escapable
-for id, c in enumerate(cavities):
-    if id in escapable:
-        continue
-    for [x,y] in c:
-        can_sqeeze = check_squeeze(x, y)
+[x_1,y_1, d] = initial_directions[0] # it is a loop so no matter which of 2 directions we start
+print("initial_directions:", initial_directions)
+p = walk_loop(x_1,y_1, [start])
+for i in range(len(p)):
+    [x,y] = p[i]
+    m[y] = m[y][:x] + '&' + m[y][x+1:]
 
 
 print_map(m)
-print(escapable)
-print(cavities)
+
+for y in range(10):
+    potential_hideouts = []
+    visited = []
+    for y in range(height):
+        visited.append([0] * width)
+        for x in range(width):
+            if m[y][x] != '&':
+                potential_hideouts.append([x,y])
+
+    for ph in potential_hideouts:
+        
+        if visited[ph[1]][ph[0]] == 1:
+            continue
+        q = collections.deque()
+        q.append(ph)
+
+        while len(q) > 0:
+            [x,y] = q.popleft()
+            
+            if visited[y][x] == 1:
+                continue
+
+            visited[y][x] = 1
+            for i in range(-1,2):
+                for j in range(-1,2):
+                    if x+i < 0 or x+i >= width or y+j < 0 or y+j >= height:
+                        m[y] = m[y][:x] + '0' + m[y][x+1:]
+                        continue
+                    if m[y+j][x+i] == '&':
+                        visited[y+j][x+i] = 1
+                    if m[y+j][x+i] == '0':
+                        visited[y+j][x+i] = 1
+                        m[y] = m[y][:x] + '0' + m[y][x+1:]
+                    
+                    q.append([x+i,y+j])
+
+
+
+
+        print("potential_hideouts:", ph)
+
+    inside = 0
+    for y in range(height):
+        for x in range(width):
+            if m[y][x] == '0' or m[y][x] == '&':
+                continue
+            inside += 1
+
+print_map(m)
+print("PART2:", inside) # 855 too high
