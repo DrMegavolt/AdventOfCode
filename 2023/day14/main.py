@@ -2,7 +2,7 @@ import os
 import collections
 import re
 folder = os.path.dirname(__file__)
-data = open(folder + "/input1.txt", "r").read().splitlines()
+data = open(folder + "/input2.txt", "r").read().splitlines()
 
 field = []
 for row in data:
