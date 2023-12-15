@@ -19,7 +19,6 @@ def hash15(s):
 
 sum = 0
 for s in sequences:
-    # print(s, hash15(s))
     sum += hash15(s)
 
 print("part1:", sum)
