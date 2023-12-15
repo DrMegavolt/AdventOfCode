@@ -11,24 +11,18 @@ for row in data:
 w = len(field[0])
 h = len(field)
 
-
 def print_map(m):
     for y in range(len(m)):
         for x in range(len(m[y])):
             print(m[y][x], end='')
         print()
 
-
 print_map(field)
-
-
 
 def tilt_north(field):
     for x in range(w):
         north = 0
         for y in range(0, h):
-            # print("x:", x, "y:", y, "bottom:", bottom)
-            # print_map(field)
             if field[y][x] == '#':
                 north = y+1
                 continue
@@ -43,8 +37,6 @@ def tilt_south(field):
     for x in range(w):
         south = h-1
         for y in range(h-1, -1, -1):
-            # print("x:", x, "y:", y, "bottom:", bottom)
-            # print_map(field)
             if field[y][x] == '#':
                 south = y-1
                 continue
@@ -58,8 +50,6 @@ def tilt_east(field):
     for y in range(h):
         east = w-1
         for x in range(w-1, -1, -1):
-            # print("x:", x, "y:", y, "bottom:", bottom)
-            # print_map(field)
             if field[y][x] == '#':
                 east = x-1
                 continue
@@ -73,8 +63,6 @@ def tilt_west(field):
     for y in range(h):
         west = 0
         for x in range(0, w):
-            # print("x:", x, "y:", y, "bottom:", bottom)
-            # print_map(field)
             if field[y][x] == '#':
                 west = x+1
                 continue
@@ -92,7 +80,6 @@ def find_weight(field):
                 weight += 1 * (h-y)
     return weight
 cycles = 10**9
-loops = []
 
 loop_candidates = dict()
 loop_size = 0
