@@ -24,16 +24,11 @@ for s in sequences:
 
 print("part1:", sum)
 
-print("HASH rn:", hash15("ot"))
-
 boxes = dict()
 for i in range(0, 256):
     boxes[i] = []
 
 for s in sequences:
-    print(s, hash15(s))
-
-
     if s[-1] == '-':
         code = s[:-1]
         box = hash15(code)
@@ -52,10 +47,6 @@ for s in sequences:
                 break
         if not replaced:
             boxes[box].append([code, int(strength)])
-
-
-
-print("boxes:", boxes)
 
 part2 = 0
 for b in boxes:
