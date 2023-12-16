@@ -78,11 +78,10 @@ def operate_beam(data, start_ray):
         processed_rays.add(str(ray))
 
     counter = 0
-    for y in range(len(energized)):
-        for x in range(len(energized[y])):
-            if energized[y][x] > 0:
+    for row in energized:
+        for cell in row:
+            if cell > 0:
                 counter += 1
-
     print("counter:", counter)
     return counter
 
