@@ -20,10 +20,10 @@ for row in data:
             "s": int(s1[2:])
         }
         parts.append(part)
-
-    [name, rules] = row[0:-1].split('{')
-    rules = rules.split(',')
-    workflows[name] = rules
+    else:
+        [name, rules] = row[0:-1].split('{')
+        rules = rules.split(',')
+        workflows[name] = rules
 
 accepted = []
 
@@ -61,7 +61,7 @@ while len(pile) > 0:
     else:
         pile.append((res, part))
 
-print(accepted)
+# print(accepted)
 part1 = 0
 for part in accepted:
     part1 += part['s'] + part['a'] + part['m'] + part['x']
@@ -93,8 +93,66 @@ def test_point(part):
             pile.append((res, part))
     return False
 
+failed_to_compact_count = 0
+while failed_to_compact_count<2:
+    compacted = 0
+    for w in workflows:
+        rules = workflows[w]
+        R_count = 0
+        A_count = 0
+        other_count = 0
+
+        for i,rule in enumerate(rules):
+            if rule.find(":") == -1:
+                if rule == "R":
+                    R_count += 1
+                elif rule == "A":
+                    A_count += 1
+                else:
+                    other_count += 1
+                    possible_replace =  workflows[rule]
+                    # print("possible_replace", possible_replace)
+                    if len(possible_replace) == 1 and possible_replace[0].find(":") == -1:
+                        rules[i] = possible_replace[0]
+                        compacted += 1
+
+                continue
+
+            [cmd, next] = rule.split(':')
+            if next == "R":
+                R_count += 1
+            elif next == "A":
+                A_count += 1
+            else:
+                other_count += 1
+                possible_sub = workflows[next]
+                if len(possible_sub) == 1 and possible_sub[0].find(":") == -1:
+                    rules[i] = cmd + ":" + possible_sub[0]
+                    compacted += 1
+        # print(w, rules, R_count, A_count, other_count)
+        if R_count > 1 and A_count == 0 and other_count == 0:
+            workflows[w] = ["R"]
+            compacted += 1
+        elif R_count == 0 and A_count > 1 and other_count == 0:
+            workflows[w] = ["A"]
+            compacted += 1
+        else:
+        # join last two rules if they are the same
+            if len(rules) > 1:
+                r1 = rules[-1] 
+                r2 = rules[-2]
+                # x>45:R, R
+                if (r1 == "R" and r2.find(":R") != -1) or (r1 == "A" and r2.find(":A") != -1):
+                    # remove -2 rule and leave -1
+                    rules.remove(r2)
+                    compacted += 1
+    print("compacted", compacted)
+    
+    if compacted == 0:
+        failed_to_compact_count += 1
 
 for w in workflows:
+    print(w, workflows[w])
     rules = workflows[w]
     for rule in rules:
         if rule.find(":") == -1:
@@ -145,10 +203,6 @@ for ix in range(len(breaking_points['x'])-1):
                     "s": s_test
                 }
                 if test_point(part):
-                    # print("found:", part)
-                    # print(x1, x2, m1, m2, a1, a2, s1, s2)
-                    # print(x2-x1, m2-m1, a2-a1, s2-s1)
                     part2 += (x2-x1)*(m2-m1)*(a2-a1)*(s2-s1)
-                    # print(part2)
 
-print("part2", part2)
+print("part2", part2) #121464316215623
